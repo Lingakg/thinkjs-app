@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="react/react.min.js"></script>
+    <script src="react/react-dom.min.js"></script>
+    <script src="react/babel.min.js"></script>
+</head>
+<body>
+
+<div id="example"></div>
+<div id="test"></div>
+<script type="text/babel">
+    var LikeButton = React.createClass({
+        getInitialState: function() {
+            return {liked: false};
+        },
+        handleClick: function(event) {
+            this.setState({liked: !this.state.liked});
+        },
+        render: function() {
+            var text = this.state.liked ? '喜欢' : '不喜欢';
+            return (
+                <p onClick={this.handleClick}>
+                    你<b>{text}</b>我。点我切换状态。
+                </p>
+            );
+        }
+    });
+
+    ReactDOM.render(
+        <LikeButton />,
+        document.getElementById('example')
+    );
+
+
+
+    function TipFrame(option){
+        var tipText = option.text||'确定要执行当前操作吗？';
+        var tipIcon = 'glyphicon glyphicon-ok icon';
+        if(option.type===1){
+            tipIcon = 'glyphicon glyphicon-ok icon';
+        }else{
+            tipIcon = 'glyphicon glyphicon-remove-sign'
+        }
+
+        var html = '<div class="xm-pop"><span\n' +
+            '        class="top-close close-btn" onclick="cancelTip('+option+')">\n' +
+            '    ×\n' +
+            '  </span>\n' +
+            '    <div class="pop-title">系统提示</div>\n' +
+            '    <div class="pop-c">\n' +
+            '        <div class="xm-icon-txt"><span class="'+tipIcon+'"></span>'+tipText+'</div>\n' +
+            '    </div>\n' +
+            '    <div class="pop-act"><a href="javascript:;" class="close-btn act-links" onclick="sureTip('+option+')">确认</a></div>\n' +
+            '</div>';
+        option.el.innerHTML = html;
+        console.log(option)
+    }
+    function sureTip(option) {
+        console.log(option)
+        option.result(true)
+    }
+    function cancelTip(option) {
+        option.result(false)
+    }
+
+
+    new TipFrame({
+        el:document.getElementById('test'),
+        type:1,
+        text:'商业模式',
+        result:function(flag){
+            console.log(flag)
+        }
+    })
+
+</script>
+
+</body>
+</html>
+
