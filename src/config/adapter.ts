@@ -38,7 +38,7 @@ exports.model = {
   mysql: {
     handle: mysql,
     database: 'wechat',
-    prefix: 'wechat_',
+    prefix: 'loan_',
     encoding: 'utf8',
     host: '59.110.143.125',
     port: '3306',

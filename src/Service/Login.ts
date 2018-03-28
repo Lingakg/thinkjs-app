@@ -1,13 +1,12 @@
 export default class Login {
      constructor(cookies: string[]) {
-        const clientToken: string[] = cookies;
-        if (clientToken) {
-            this.flag = true;
-        } else {
-            this.flag = false;
-        }
+         // this.clientToken = cookies;
+         this.is(cookies)
     }
-    is() {
-        return this.flag;
+    async is(clientToken) {
+
+        // console.log('查询redis', data, clientToken);
+        // return this.flag;
+        return true;
     }
 }

@@ -8,12 +8,18 @@ export default class extends WebBase {
         super(ctx);
         console.log('请求到达api构造');
     }
-    listAction() {
+    async listAction() {
         console.log('请求到达控制器 list Action')
-        this.body = new BaseModel(200, [1, 1, 2, 5, 54, 3, 5, 3]);
+        const model = this.model('list');
+        const data = await model.select();
+        this.body = new BaseModel(200, data);
     }
-    testAction() {
-        this.body = {code: 200, data: [{name: 'wanlin'}]};
+    async detailAction() {
+        const queryId: any = this.ctx.request.body.post.id
+        console.log(queryId)
+        const model = this.model('list');
+        const data = await model.where({id: queryId}).find();
+        this.body = new BaseModel(200, data);
     }
     async addAction() {
         /**

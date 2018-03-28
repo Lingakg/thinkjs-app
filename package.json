@@ -21,7 +21,8 @@
     "think-session-redis": "^1.0.4",
     "think-view": "^1.0.11",
     "think-view-nunjucks": "^1.0.1",
-    "thinkjs": "^3.2.3"
+    "thinkjs": "^3.2.3",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "typescript": "^2.5.3",
