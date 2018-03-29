@@ -13,11 +13,22 @@ export default class extends Base {
         const l2 = this.cookie('_l2');
         const l3 = this.cookie('_l3');
         const l4 = this.cookie('_l4');
-        // if (!this.test([l1, l2, l3, l4])) {
-        //     return this.body = new BaseModel(200, {isLogin: 'N'});
-        // } else {
-            return this.body = new BaseModel(200, {isLogin: 'Y'});
-        // }
+        const tokens: string[] = [l1,l2,l3,l4]
+        if (tokens[0] === undefined || tokens[1] === undefined || tokens[2] === undefined || tokens[3] === undefined) {
+            this.ctx.req.isLogin = false;
+            return this.body = new BaseModel(200,{isLogin: "N"});
+        }
+        const sunToken: string = tokens[0].toString() +
+            tokens[1].toString() + tokens[2].toString() + tokens[3].toString();
+        const token: string = crypto.createHmac('md5', sunToken).digest('hex');
+        const rds = await this.cache(token);
+        if (rds === undefined) {
+            this.ctx.req.isLogin = false;
+            return this.body = new BaseModel(200,{isLogin: "N"});
+        } else {
+            this.ctx.req.isLogin = true;
+            return this.body = new BaseModel(200,{isLogin: "Y"});
+        }
     }
 
     async registerAction() {
@@ -65,19 +76,31 @@ export default class extends Base {
         }
 
     }
-
-    async test(tokens) {
-        if (tokens[0] == undefined || tokens[1] == undefined || tokens[2] == undefined || tokens[3] == undefined){
-            return false;
+    async logoutAction() {
+        const l1 = this.cookie('_l1');
+        const l2 = this.cookie('_l2');
+        const l3 = this.cookie('_l3');
+        const l4 = this.cookie('_l4');
+        const tokens: string[] = [l1,l2,l3,l4]
+        if (tokens[0] === undefined || tokens[1] === undefined || tokens[2] === undefined || tokens[3] === undefined) {
+            this.ctx.req.isLogin = false;
+            return this.body = new BaseModel(200,{isLogout: "Y"});
         }
-        let sunToken: string = tokens[0].toString() + tokens[1].toString() + tokens[2].toString() + tokens[3].toString();
-        let token: string = crypto.createHmac('md5', sunToken).digest('hex');
+        const sunToken: string = tokens[0].toString() +
+            tokens[1].toString() + tokens[2].toString() + tokens[3].toString();
+        const token: string = crypto.createHmac('md5', sunToken).digest('hex');
         const rds = await this.cache(token);
-        console.log(rds)
-        if (rds==undefined) {
-            return false;
+        if (rds === undefined) {
+            this.ctx.req.isLogin = false;
+            return this.body = new BaseModel(200,{isLogout: "Y"});
         } else {
-            return true;
+            this.cookie('_l1', null)
+            this.cookie('_l2', null)
+            this.cookie('_l3', null)
+            this.cookie('_l4', null)
+            await this.cache(token, null, 'redis');
+            this.ctx.req.isLogin = false;
+            return this.body = new BaseModel(200,{isLogout: "Y"});
         }
     }
 }

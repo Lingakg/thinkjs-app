@@ -22,27 +22,25 @@ export default class extends Base {
         console.dir(this.ctx.get('Origin'))
         console.log(this.ctx.request.body)
 
-        // if (!this.test([l1, l2, l3, l4])) {
-        //     return this.body = new BaseModel(500, "未登录");
-        // }
+        this.test([l1, l2, l3, l4])
         this.ctx.set("Access-Control-Allow-Origin", "*");
         this.ctx.set("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
         this.ctx.set("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
         this.ctx.set("X-Powered-By", ' 3.2.1');
-        console.log("请求经过Web 构造");
     }
 
     async test(tokens: string[]) {
-        if (tokens[0] == undefined || tokens[1] == undefined || tokens[2] == undefined || tokens[3] == undefined) {
-            return (false)
+        if (tokens[0] === undefined || tokens[1] === undefined || tokens[2] === undefined || tokens[3] === undefined) {
+            this.ctx.req.isLogin = false;
         }
-        let sunToken: string = tokens[0].toString() + tokens[1].toString() + tokens[2].toString() + tokens[3].toString();
-        let token: string = crypto.createHmac('md5', sunToken).digest('hex');
+        const sunToken: string = tokens[0].toString() +
+            tokens[1].toString() + tokens[2].toString() + tokens[3].toString();
+        const token: string = crypto.createHmac('md5', sunToken).digest('hex');
         const rds = await this.cache(token);
-        if (rds == undefined) {
-            return (false)
+        if (rds === undefined) {
+            this.ctx.req.isLogin = false;
         } else {
-            return (true)
+            this.ctx.req.isLogin = true;
         }
     }
 }

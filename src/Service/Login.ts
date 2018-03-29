@@ -1,12 +1,7 @@
-export default class Login {
-     constructor(cookies: string[]) {
-         // this.clientToken = cookies;
-         this.is(cookies)
-    }
-    async is(clientToken) {
+import BaseModel from "../selfModel/BaseModel";
 
-        // console.log('查询redis', data, clientToken);
-        // return this.flag;
-        return true;
+export default class Login {
+     constructor(ctx: any) {
+         this.body = new BaseModel(500, '未登录');
     }
 }

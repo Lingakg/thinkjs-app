@@ -9,7 +9,8 @@ export default class BaseModel {
         } else {
             return{
                 code,
-                msg: data
+                msg: 'fail',
+                cause: data
             };
         }
     }
